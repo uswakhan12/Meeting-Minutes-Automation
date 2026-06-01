@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ClipboardList, RotateCcw, Sparkles } from 'lucide-react'
+import { ArrowUp, ClipboardList, RotateCcw, Sparkles } from 'lucide-react'
 import TranscriptInput from './components/TranscriptInput.jsx'
 import ResultsPanel from './components/ResultsPanel.jsx'
 import {
@@ -13,6 +13,7 @@ function App() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
   const resultsRef = useRef(null)
 
   useEffect(() => {
@@ -20,6 +21,15 @@ function App() {
       resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [result])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   async function handleSubmit(text) {
     setTranscript(text)
@@ -48,9 +58,16 @@ function App() {
   }
 
   function handleReset() {
+    setTranscript('')
     setResult(null)
     setError(null)
   }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const canReset = Boolean(transcript.trim() || result || error)
 
   const urgentCount =
     result?.action_items?.filter((item) => item.is_urgent).length ?? 0
@@ -82,7 +99,7 @@ function App() {
                 </p>
               </div>
             </div>
-            {(result || error) && (
+            {canReset && (
               <button
                 type="button"
                 onClick={handleReset}
@@ -110,6 +127,8 @@ function App() {
               transcript={transcript}
               onTranscriptChange={setTranscript}
               onSubmit={handleSubmit}
+              onReset={handleReset}
+              showReset={canReset}
               loading={loading}
               error={error}
             />
@@ -156,6 +175,17 @@ function App() {
           Structured extraction · Confidence & urgency signals · Export ready
         </footer>
       </div>
+
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-600/40 transition-all hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-600/60 dark:bg-indigo-600 dark:hover:bg-indigo-500"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="h-5 w-5" aria-hidden="true" />
+        </button>
+      )}
     </div>
   )
 }
