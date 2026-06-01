@@ -1,5 +1,8 @@
 import { Loader2 } from 'lucide-react'
 
+const SAMPLE_TRANSCRIPT =
+  "Alright so we've decided we're going with the new pricing model starting Q3. Sarah can you own the updated pricing page on the website? We need that done before the launch. John mentioned he'd look into the email campaign but nothing concrete. We still haven't decided on the discount structure for enterprise. Meeting ran long, let's pick that up next time."
+
 function formatCharacterCount(count) {
   return `${count.toLocaleString()} character${count === 1 ? '' : 's'}`
 }
@@ -24,6 +27,16 @@ export default function TranscriptInput({
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-3">
       <div className="space-y-1.5">
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => onTranscriptChange(SAMPLE_TRANSCRIPT)}
+            disabled={loading}
+            className="text-xs font-medium text-slate-600 underline-offset-2 hover:text-slate-900 hover:underline disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-400 dark:hover:text-slate-200"
+          >
+            Load sample transcript
+          </button>
+        </div>
         <textarea
           value={transcript}
           onChange={(e) => onTranscriptChange(e.target.value)}

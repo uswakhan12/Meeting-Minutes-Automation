@@ -1,5 +1,21 @@
 const API_PATH = '/api/extract-meeting-actions'
 
+export class NetworkError extends Error {
+  constructor(
+    message = 'Unable to reach the server. Check your connection and try again.',
+  ) {
+    super(message)
+    this.name = 'NetworkError'
+  }
+}
+
+export class ApiError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
+
 /**
  * @param {string} transcript
  * @returns {Promise<{
@@ -12,7 +28,7 @@ const API_PATH = '/api/extract-meeting-actions'
  */
 export async function extractMeetingActions(transcript) {
   if (!transcript?.trim()) {
-    throw new Error('Transcript is empty.')
+    throw new ApiError('Transcript is empty.')
   }
 
   let response
@@ -22,20 +38,19 @@ export async function extractMeetingActions(transcript) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ transcript }),
     })
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    throw new Error(`Request failed: ${message}`)
+  } catch {
+    throw new NetworkError()
   }
 
   let data
   try {
     data = await response.json()
   } catch {
-    throw new Error('Server returned an invalid JSON response.')
+    throw new ApiError('Server returned an invalid JSON response.')
   }
 
   if (!response.ok) {
-    throw new Error(data.error ?? `Request failed (${response.status}).`)
+    throw new ApiError(data.error ?? `Request failed (${response.status}).`)
   }
 
   return data

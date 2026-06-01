@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import TranscriptInput from './components/TranscriptInput.jsx'
 import ResultsPanel from './components/ResultsPanel.jsx'
-import { extractMeetingActions } from './lib/api.js'
+import {
+  ApiError,
+  extractMeetingActions,
+  NetworkError,
+} from './lib/api.js'
 
 function App() {
   const [transcript, setTranscript] = useState('')
@@ -26,7 +30,17 @@ function App() {
       setResult(data)
     } catch (err) {
       setResult(null)
-      setError(err instanceof Error ? err.message : 'Something went wrong.')
+      if (err instanceof NetworkError) {
+        setError(
+          'Connection problem: could not reach the server. Check your network and try again.',
+        )
+      } else if (err instanceof ApiError) {
+        setError(err.message)
+      } else {
+        setError(
+          err instanceof Error ? err.message : 'Something went wrong.',
+        )
+      }
     } finally {
       setLoading(false)
     }
