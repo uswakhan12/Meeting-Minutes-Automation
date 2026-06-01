@@ -1,13 +1,16 @@
-import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 
 function formatCharacterCount(count) {
   return `${count.toLocaleString()} character${count === 1 ? '' : 's'}`
 }
 
-export default function TranscriptInput({ onSubmit, loading, error }) {
-  const [transcript, setTranscript] = useState('')
-
+export default function TranscriptInput({
+  transcript,
+  onTranscriptChange,
+  onSubmit,
+  loading,
+  error,
+}) {
   const characterCount = transcript.length
   const isEmpty = transcript.trim().length === 0
   const isDisabled = isEmpty || loading
@@ -23,7 +26,7 @@ export default function TranscriptInput({ onSubmit, loading, error }) {
       <div className="space-y-1.5">
         <textarea
           value={transcript}
-          onChange={(e) => setTranscript(e.target.value)}
+          onChange={(e) => onTranscriptChange(e.target.value)}
           placeholder="Paste your meeting transcript here..."
           disabled={loading}
           className="min-h-[200px] w-full resize-y rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm leading-relaxed text-slate-900 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500/20 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-slate-400 dark:focus:ring-slate-400/20"
