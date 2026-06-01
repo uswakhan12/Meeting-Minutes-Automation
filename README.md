@@ -741,7 +741,7 @@ Extracts schema fields, assigns confidence, resolves relative dates, flags ambig
 
 Missing owners, unclear deadlines, warnings/flags, empty extractions, and the final decision to copy/send messages.
 
-### What we learned
+### What I learned
 
 - Structured JSON beats a plain summary for accountability UIs.
 - Confidence and urgency must be separate.
