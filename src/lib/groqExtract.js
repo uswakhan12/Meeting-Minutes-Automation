@@ -12,8 +12,9 @@ const JSON_RETRY_INSTRUCTION =
 const SYSTEM_PROMPT = `You are a meeting analyst. Extract structured data from meeting transcripts.
 
 Language:
-- Accept transcripts in any language, including Urdu (اردو), English, or mixed language.
-- Understand the meeting content in the source language.
+- Accept transcripts in English, Roman Urdu (Urdu written in Latin script, e.g. "aaj ki meeting mein hum ne decide kiya"), or a mix of both.
+- Roman Urdu is common in chat and voice-to-text notes — treat it as full meeting content, not informal noise.
+- Understand the meeting in whatever language or script the user pasted.
 - Write all JSON string values (summary, tasks, decisions, flags, warnings, open_questions) in English so follow-ups are easy to share internationally.
 
 Return ONLY valid JSON with this exact structure:

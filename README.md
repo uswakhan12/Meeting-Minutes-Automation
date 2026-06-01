@@ -11,7 +11,7 @@ Meeting → Actions is a single-page app that sends a transcript to an LLM-backe
 | Feature | Description |
 |---------|-------------|
 | **Structured extraction** | Decisions, action items, open questions, summary, warnings |
-| **Multilingual input** | Paste transcripts in **English, Urdu (اردو), or mixed language** — the model analyzes the content and returns structured output in English |
+| **Multilingual input** | Paste transcripts in **English, Roman Urdu** (Urdu in Latin script), or a mix — the model analyzes the content and returns structured output in English |
 | **Confidence** | Per-item `high` / `medium` / `low` based on how explicit the transcript is |
 | **Urgency** | `Urgent` badge when deadline is within 7 days (or overdue) or the meeting marked the item as critical |
 | **Escalation UI** | Missing owners, unclear deadlines, flags, and a “Needs your attention” callout |
@@ -21,21 +21,26 @@ Meeting → Actions is a single-page app that sends a transcript to an LLM-backe
 
 ---
 
-## Multilingual transcripts (including Urdu)
+## Multilingual transcripts (including Roman Urdu)
 
-You can paste meeting notes or transcripts **in Urdu**, English, or a mix of both. The system:
+You can paste meeting notes in **English**, **Roman Urdu** (Urdu typed in Latin letters—the way people write in WhatsApp, Slack, or voice-to-text), or a mix of both. You do **not** need the Urdu keyboard or Arabic script.
 
-1. Reads and understands the meeting in the language you provide.
+The system:
+
+1. Reads and understands Roman Urdu or English as pasted.
 2. Extracts the same schema (decisions, actions, open questions, etc.).
-3. Writes **summary and field values in English** in the results and exports (so Slack/email follow-ups are easy to share with mixed teams).
+3. Writes **summary and field values in English** in the results and exports (easy to share with the wider team).
 
-**Example (Urdu input):**
+**Example (Roman Urdu input):**
 
 ```
-آج کی میٹنگ میں ہم نے فیصلہ کیا کہ Q3 سے نئی pricing model لگے گی۔
-سارہ ویب سائٹ کی pricing page کی ذمہ دار ہوں گی، لانچ سے پہلے۔
-enterprise discount ابھی طے نہیں ہوا — اگلی میٹنگ میں دیکھیں گے۔
+Aaj ki meeting mein hum ne decide kiya ke Q3 se nayi pricing model lage gi.
+Sarah website ki pricing page ki zimmedar hongi, launch se pehle complete karna hai.
+John ne email campaign ke baare mein bola lekin clear owner nahi mila.
+Enterprise discount abhi decide nahi hua — next meeting mein dekhenge.
 ```
+
+**Not required:** Arabic-script Urdu (e.g. اردو keyboard). Roman Urdu works the same way for analysis.
 
 The app will still produce structured action items, urgency signals, and exports—the analyzer does not require English-only input.
 
@@ -85,7 +90,7 @@ The gap is the **last mile between conversation and commitment**: turning unstru
 | Post-meeting friction | People re-read transcripts and still miss items |
 | Empty states | Status meetings should not spawn fake tasks |
 | Export as deliverable | Pasting Slack/email is the “aha” moment |
-| Multilingual notes | Teams (e.g. Urdu + English) need one analyzer, shareable English output |
+| Roman Urdu notes | Common in local teams; one analyzer, English output for follow-ups |
 
 ---
 
@@ -95,7 +100,7 @@ The gap is the **last mile between conversation and commitment**: turning unstru
 
 **Secondary:** ICs, founders, anyone with a transcript (Zoom, Meet, Otter, handwritten notes).
 
-**Job to be done:** *“I have a transcript—in any language I work in. Give me a follow-up I can send, and show me what still needs a human decision.”*
+**Job to be done:** *“I have a transcript—in English or Roman Urdu. Give me a follow-up I can send, and show me what still needs a human decision.”*
 
 ---
 
@@ -169,7 +174,7 @@ server/
 
 | Decision | Example |
 |----------|---------|
-| Extract decisions / actions / open questions | From narrative or Urdu dialogue |
+| Extract decisions / actions / open questions | From English or Roman Urdu dialogue |
 | Assign confidence | Explicit vs hedged wording |
 | Mark urgency | Near deadline or meeting emphasis |
 | Resolve relative dates | “next Friday” → `YYYY-MM-DD` using today |
@@ -196,7 +201,7 @@ server/
 - **Schema beats summary** for accountability workflows.
 - **Confidence ≠ urgency** — separate rules and UI reduce false “everything is urgent.”
 - **Open questions** deserve their own bucket—not every unresolved topic is an action item.
-- **Multilingual input** works when the prompt asks for English structured output for sharing.
+- **Roman Urdu input** works well for informal meeting notes; English output keeps follow-ups professional.
 - **Server-side keys** and **JSON retry** are small choices that matter in real use.
 - **Static GitHub Pages** hosts UI only; analyze needs `npm run dev` or `npm run preview` unless you add a backend.
 
@@ -225,7 +230,7 @@ GROQ_API_KEY=your_key_here
 npm run dev
 ```
 
-Open `http://localhost:5173`. Use **Load sample** or paste your own transcript (English or Urdu).
+Open `http://localhost:5173`. Use **Load sample** or paste your own transcript (English or Roman Urdu).
 
 ### Get a Groq API key
 
