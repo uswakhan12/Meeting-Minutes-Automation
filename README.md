@@ -27,7 +27,7 @@ Meeting → Actions is a React single-page application that sends meeting transc
 17. [Configuration](#configuration)
 18. [Quick start](#quick-start)
 19. [Scripts](#scripts)
-20. [Build and deployment](#build-and-deployment)
+20. [Build](#build)
 21. [Rate limits](#rate-limits)
 22. [Test transcripts](#test-transcripts)
 23. [Limitations](#limitations)
@@ -65,7 +65,7 @@ Meeting → Actions is a React single-page application that sends meeting transc
 | Empty state | When no decisions and no actions |
 | Network vs API errors | `NetworkError` / `ApiError` in `App.jsx` |
 | Dark mode | Tailwind `dark:` variants throughout |
-| GitHub Pages–ready assets | `base: './'` in `vite.config.js` |
+| Relative asset paths | `base: './'` in `vite.config.js` |
 
 ---
 
@@ -381,7 +381,7 @@ Content-Type: application/json
 | `400` | Empty transcript, Groq error, parse failure |
 | `500` | `GROQ_API_KEY` not set |
 
-Only available when Vite middleware is running (`npm run dev`, `npm run preview`). **Not** on static GitHub Pages alone.
+Available when the API middleware is running (`npm run dev`, `npm run preview`).
 
 ---
 
@@ -573,7 +573,7 @@ Restart dev server after changing `.env`.
 
 ### Vite
 
-- `base: './'` — relative paths for GitHub Pages.
+- `base: './'` — relative asset paths for static hosts.
 - `loadEnv(mode, process.cwd(), '')` — loads all env vars for middleware.
 
 ### Tailwind
@@ -621,7 +621,7 @@ Open `http://localhost:5173`.
 
 ---
 
-## Build and deployment
+## Build
 
 ```bash
 npm run build
@@ -629,24 +629,14 @@ npm run build
 
 Output: `dist/` (static HTML, JS, CSS).
 
-### GitHub Pages
-
-```bash
-npm install --save-dev gh-pages
-npm run build
-npx gh-pages -d dist
-```
-
-Repository **Settings → Pages → Branch: `gh-pages` / root**.
-
-**Important:** Static Pages hosts the UI only. `/api/extract-meeting-actions` exists only under `dev` / `preview`. For a public demo with analyze, use `npm run preview` after build, or add a serverless backend.
-
-### Fully working local production test
+### Local production test
 
 ```bash
 npm run build
 npm run preview
 ```
+
+**Analyze Meeting** works with `npm run dev` and `npm run preview` (API middleware). Add a live demo URL in this README when you deploy.
 
 ---
 
@@ -715,7 +705,7 @@ Expect: no decisions/actions + friendly empty message.
 |------------|--------|
 | No calendar/Jira/Slack send | Copy-only export |
 | No real-time capture | Paste-only transcripts |
-| Static hosting | No Groq proxy on GitHub Pages alone |
+| Static-only hosting | Needs a backend for `/api/extract-meeting-actions` |
 | LLM variability | Confidence/urgency can differ run-to-run at `temperature: 0.2` |
 | Deadline parsing | `urgency.js` best on `YYYY-MM-DD`; odd date strings may not parse |
 | Model changes | Groq may deprecate models; update `MODEL` in `groqExtract.js` |
