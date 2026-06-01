@@ -20,7 +20,7 @@ export class ApiError extends Error {
  * @param {string} transcript
  * @returns {Promise<{
  *   decisions: { text: string, confidence: string }[],
- *   action_items: { task: string, owner: string | null, deadline: string | null, confidence: string, flag: string | null }[],
+ *   action_items: { task: string, owner: string | null, deadline: string | null, confidence: string, is_urgent: boolean, urgency_reason: string | null, flag: string | null }[],
  *   open_questions: { text: string }[],
  *   summary: string,
  *   warnings: string[]

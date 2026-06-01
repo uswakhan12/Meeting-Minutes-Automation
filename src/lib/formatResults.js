@@ -1,8 +1,10 @@
 function formatActionItem(item) {
   const owner = item.owner ?? 'Unassigned'
   const deadline = item.deadline ?? 'No deadline'
+  const urgent = item.is_urgent ? ' 🔥 *URGENT*' : ''
+  const urgencyNote = item.urgency_reason ? ` _(${item.urgency_reason})_` : ''
   const flag = item.flag ? ` _(${item.flag})_` : ''
-  return `• ${item.task} — ${owner}, due ${deadline}${flag}`
+  return `• ${item.task} — ${owner}, due ${deadline}${urgent}${urgencyNote}${flag}`
 }
 
 export function formatSlackMessage(data) {
@@ -71,6 +73,9 @@ export function formatEmailMessage(data) {
       const owner = item.owner ?? 'Unassigned'
       const deadline = item.deadline ?? 'TBD'
       let line = `• ${item.task} — Owner: ${owner}, Deadline: ${deadline}`
+      if (item.is_urgent) {
+        line += ` [URGENT${item.urgency_reason ? `: ${item.urgency_reason}` : ''}]`
+      }
       if (item.flag) line += ` (Note: ${item.flag})`
       sections.push(line)
     }
